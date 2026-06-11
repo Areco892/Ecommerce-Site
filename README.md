@@ -1,2 +1,2 @@
-# Meal-Planner
-A meal planner that allows the user to select from a variety of meals and follow the steps to prepare the selected meal.
+# Ecommerce Site
+An ecommerce website that serves as the marketplace for artistic goods. From drawings to photographs, this ecommerce website allows artists to showcase their work and for customers to browse and purchase those products
