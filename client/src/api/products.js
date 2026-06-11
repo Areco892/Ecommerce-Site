@@ -14,3 +14,16 @@ export const fetchProductById = async (id) => {
   if (!res.ok) throw new Error('Product not found');
   return res.json();
 };
+
+export const createProduct = async (productData) => {
+  const res = await fetch(`${BASE_URL}/products`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(productData),
+  });
+  if (!res.ok) {
+    console.log('Error response:', await res.text());
+    throw new Error('Failed to create product');
+  }
+  return res.json();
+};

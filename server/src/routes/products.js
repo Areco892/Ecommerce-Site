@@ -43,4 +43,26 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// POST /api/products — create a new product listing
+router.post('/', async (req, res) => {
+  const { title, description, price, category, image_url, file_url, creator_id, quantity } = req.body;
+
+  if (!title || !price || !category) {
+    return res.status(400).json({ error: 'Title, price, and category are required' });
+  }
+
+  try {
+    const result = await getPool().query(
+      `INSERT INTO products (title, description, price, category, image_url, file_url, creator_id, quantity)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING *`,
+      [title, description, price, category, image_url, file_url, creator_id || null, quantity || 1]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating product:', err.message);
+    res.status(500).json({ error: 'Failed to create product' });
+  }
+});
+
 export default router;
