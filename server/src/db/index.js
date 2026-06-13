@@ -2,13 +2,18 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+let pool;
 
-pool.on('error', (err) => {
-  console.error('Unexpected database error', err);
-  process.exit(-1);
-});
+export const getPool = () => {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
 
-export default pool;
+    pool.on('error', (err) => {
+      console.error('Unexpected database error', err);
+      process.exit(-1);
+    });
+  }
+  return pool;
+};
