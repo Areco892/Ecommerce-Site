@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductById } from '../api/products';
+import { useCart } from '../context/CartContext';
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     fetchProductById(id)
@@ -15,6 +18,12 @@ const ProductPage = () => {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleAddToCart = async () => {
+    await addToCart(product.id);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -29,7 +38,9 @@ const ProductPage = () => {
           <p style={styles.category}>{product.category}</p>
           <p style={styles.description}>{product.description}</p>
           <p style={styles.price}>${product.price}</p>
-          <button style={styles.button}>Add to Cart</button>
+          <button onClick={handleAddToCart} style={styles.button}>
+            {added ? '✓ Added to Cart' : 'Add to Cart'}
+          </button>
         </div>
       </div>
     </div>
